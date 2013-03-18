@@ -1,0 +1,55 @@
+parameters:
+    str_social_sms_queue.control.class: StrSocial\Bundle\SmsQueueBundle\Component\Control
+    str_social_sms_queue.sender.class: StrSocial\Bundle\SmsQueueBundle\Component\Sender
+    str_social_sms_queue.queue.class: StrSocial\Bundle\SmsQueueBundle\Component\Queue
+    str_social_sms_queue.gatekeeper.class: StrSocial\Bundle\SmsQueueBundle\Component\Gatekeeper
+    str_social_sms_queue.message.class: StrSocial\Bundle\SmsQueueBundle\Component\Message
+    
+    str_social_sms_queue.gatekeeper.queue_times:
+        start: 10:30:00
+        end: 09:00:00
+    
+    str_social_sms_queue.sender.sending_interval: 00:05:00
+    str_social_sms_queue.sender.buffer.on: false
+    
+    str_social_sms_queue.twilio.parameters:
+      # you must replate following values with proper ones from twilio
+      sid: sidvalue 
+      authToken: authTokenvalue
+    
+services:
+
+    # CONTROL
+    str_social_sms_queue.control:
+        class: "%str_social_sms_queue.control.class%"
+        arguments: 
+          - "@str_social_sms_queue.queue"
+          - "@str_social_sms_queue.gatekeeper"
+          - "@str_social_sms_queue.sender"
+
+    # SENDER
+    str_social_sms_queue.sender:
+        class: "%str_social_sms_queue.sender.class%"
+        arguments: 
+          - "@doctrine.orm.entity_manager"
+          - "@str_social_sms_queue.twilio.api"
+          - "%str_social_sms_queue.sender.sending_interval%"
+          - "%str_social_sms_queue.sender.buffer.on%"
+        
+        
+    # QUEUE
+    str_social_sms_queue.queue:
+        class: "%str_social_sms_queue.queue.class%"
+        arguments: ["@doctrine.orm.entity_manager"]
+
+    # GATEKEEPER
+    str_social_sms_queue.gatekeeper:
+        class: "%str_social_sms_queue.gatekeeper.class%"
+        arguments: ["%str_social_sms_queue.gatekeeper.queue_times%"]
+
+    #TWILIO 
+    str_social_sms_queue.twilio.api:
+        class: "%twilio.api.class%"
+        arguments: ["%str_social_sms_queue.twilio.parameters%"]
+        
+       

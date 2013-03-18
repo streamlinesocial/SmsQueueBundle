@@ -1,0 +1,3 @@
+str_social_sms_queue_homepage:
+    pattern:  /sms/{phone}/{text}
+    defaults: { _controller: "StrSocialSmsQueueBundle:Default:index" }
