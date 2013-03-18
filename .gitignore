@@ -1,4 +1,4 @@
 /phpunit.xml
 *~
-composer.locl
+composer.lock
 /vendor/
