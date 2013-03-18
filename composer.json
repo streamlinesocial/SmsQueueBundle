@@ -18,6 +18,9 @@
     "require-dev": {
         "symfony/framework-bundle": ">=2.1,<2.2-dev"
     },
+    "autoload" : {
+          "psr-0": { "StrSocial\\Bundle\\SmsQueueBundle" : ""}
+    },
     "minimum-stability": "dev",
     "target-dir": "StrSocial/Bundle/SmsQueueBundle"
 }
