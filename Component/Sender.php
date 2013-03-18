@@ -13,6 +13,7 @@ class Sender
     private $twilio;
     private $sending_interval;
     private $buffer_enable;
+    private $from_phone;
 
     const CONF_FLUSH_BUFFER_EVERY_N_SENT = 10;
 
@@ -20,13 +21,14 @@ class Sender
             EntityManager $entityManager,
             Twilio $twilio,
             $sending_interval,
+    		$from_phone,
             $buffer_enable = FALSE )
     {
-        $this->em = $entityManager;
+    	$this->em = $entityManager;
         $this->twilio = $twilio;
         $this->sending_interval = $sending_interval;
         $this->buffer_enable = (bool) $buffer_enable;
-
+		$this->from_phone = $from_phone;
     }
 
     public function send ( MessageInterface $message )
@@ -98,6 +100,6 @@ class Sender
         $this->twilio
                 ->account
                 ->sms_messages
-                ->create ( '13852444845', $phone, $text );
+                ->create ( $this->from_phone, $phone, $text );
     }
 }

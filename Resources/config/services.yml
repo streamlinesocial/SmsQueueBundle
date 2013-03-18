@@ -34,6 +34,7 @@ services:
           - "@doctrine.orm.entity_manager"
           - "@str_social_sms_queue.twilio.api"
           - "%str_social_sms_queue.sender.sending_interval%"
+          - "%str_social_sms_queue.twilio.from%"
           - "%str_social_sms_queue.sender.buffer.on%"
         
         
