@@ -1,7 +1,7 @@
 {
-    "name": "streamlinesocial/sms-queue-bundle"
+    "name": "streamlinesocial/sms-queue-bundle",
     "type": "symfony-bundle",
-    "description": "Deliver SMS messages only at appropiate times"
+    "description": "Deliver SMS messages only at appropiate times",
     "keywords": ["queue", "sms", "bundle","twilio"],
     "homepage": "http://github.com/streamlinesocial/SmsQueueBundle",
     "license": "MIT",
