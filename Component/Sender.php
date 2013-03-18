@@ -21,14 +21,14 @@ class Sender
             EntityManager $entityManager,
             Twilio $twilio,
             $sending_interval,
-    		$from_phone,
+            $from_phone,
             $buffer_enable = FALSE )
     {
-    	$this->em = $entityManager;
+        $this->em = $entityManager;
         $this->twilio = $twilio;
         $this->sending_interval = $sending_interval;
         $this->buffer_enable = (bool) $buffer_enable;
-		$this->from_phone = $from_phone;
+        $this->from_phone = $from_phone;
     }
 
     public function send ( MessageInterface $message )
