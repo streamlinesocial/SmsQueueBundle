@@ -1,0 +1,23 @@
+{
+    "name": "streamlinesocial/sms-queue-bundle"
+    "type": "symfony-bundle",
+    "description": "Deliver SMS messages only at appropiate times"
+    "keywords": ["queue", "sms", "bundle","twilio"],
+    "homepage": "http://github.com/streamlinesocial/SmsQueueBundle",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "nachinius",
+            "email": "ignacio@streamlinesocial.com"
+        }
+    ],
+    "require": {
+        "php": ">=5.3.2",
+        "tsslabs/vresh-twilio-bundle" : "dev-master"
+    },
+    "require-dev": {
+        "symfony/framework-bundle": ">=2.1,<2.2-dev"
+    },
+    "minimum-stability": "dev",
+    "target-dir": "StrSocial/Bundle/SmsQueueBundle"
+}
