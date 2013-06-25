@@ -2,7 +2,7 @@ parameters:
     str_social_sms_queue.control.class: StrSocial\Bundle\SmsQueueBundle\Component\Control
     str_social_sms_queue.sender.class: StrSocial\Bundle\SmsQueueBundle\Component\Sender
     str_social_sms_queue.queue.class: StrSocial\Bundle\SmsQueueBundle\Component\Queue
-    str_social_sms_queue.gatekeeper.class: StrSocial\Bundle\SmsQueueBundle\Component\Gatekeeper
+    str_social_sms_queue.gatekeeper.class: StrSocial\Bundle\SmsQueueBundle\Component\GateKeeper
     str_social_sms_queue.message.class: StrSocial\Bundle\SmsQueueBundle\Component\Message
     
     str_social_sms_queue.gatekeeper.queue_times:
