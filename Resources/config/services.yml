@@ -6,8 +6,8 @@ parameters:
     str_social_sms_queue.message.class: StrSocial\Bundle\SmsQueueBundle\Component\Message
     
     str_social_sms_queue.gatekeeper.queue_times:
-        start: 22:00:00
-        end: 09:00:00
+        start: "%str_social_sms_queue.queue.start%"
+        end: "%str_social_sms_queue.queue.stop%"
     
     str_social_sms_queue.sender.sending_interval: 00:05:00
     str_social_sms_queue.sender.buffer.on: false
