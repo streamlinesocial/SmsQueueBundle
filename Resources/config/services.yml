@@ -9,8 +9,8 @@ parameters:
         start: "%str_social_sms_queue.queue.start%"
         end: "%str_social_sms_queue.queue.stop%"
     
-    str_social_sms_queue.sender.sending_interval: 00:05:00
-    str_social_sms_queue.sender.buffer.on: false
+    str_social_sms_queue.sender.sending_interval: 00:01:00
+    str_social_sms_queue.sender.buffer.on: on
     
     str_social_sms_queue.twilio.parameters:
       # you must replate following values with proper ones from twilio

@@ -51,11 +51,12 @@ class Sender
         }
     }
 
-    protected function addToBuffer ( $phone, $text )
+    protected function addToBuffer ( $phone, $text, $sent = FALSE )
     {
         $buffer = new BufferMessage ( );
         $buffer->setPhoneNumber ( $phone );
         $buffer->setText ( $text );
+        $buffer->setSent ( $sent );
 
         $this->em
                 ->persist ( $buffer );
