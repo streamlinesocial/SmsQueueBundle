@@ -1,12 +1,12 @@
 <?php
 
 namespace StrSocial\Bundle\SmsQueueBundle\Entity;
-
 use Doctrine\ORM\Mapping as ORM;
 
 /**
  * @ORM\Entity
- * @ORM\Table(name="str_social_sms_queue_buffer")
+ * @ORM\Table(name="str_social_sms_queue_buffer",indexes={@ORM\Index(name="sent_idx", columns={"sent"})})
+ * @ORM\HasLifecycleCallbacks
  */
 class BufferMessage
 {
@@ -30,6 +30,22 @@ class BufferMessage
     protected $text;
 
     /**
+     * @ORM\Column(type="boolean")
+     */
+    protected $sent = FALSE;
+
+    /**
+     * @ORM\Column(type="datetime", name="updated_at")
+     */
+    protected $updatedAt;
+
+    /**
+     * @ORM\Column(type="datetime", name="created_at")
+     */
+    protected $createdAt;
+
+   
+    /**
      * Get id
      *
      * @return integer 
@@ -48,7 +64,7 @@ class BufferMessage
     public function setPhoneNumber($phoneNumber)
     {
         $this->phone_number = $phoneNumber;
-    
+
         return $this;
     }
 
@@ -71,7 +87,7 @@ class BufferMessage
     public function setText($text)
     {
         $this->text = $text;
-    
+
         return $this;
     }
 
@@ -86,25 +102,54 @@ class BufferMessage
     }
 
     /**
-     * Set created
-     *
-     * @param \DateTime $created
+     * Set sent flag
+     * 
+     * @param boolean $sent
      * @return BufferMessage
      */
-    public function setCreated($created)
+    public function setSent($sent)
     {
-        $this->created = $created;
-    
+        $this->sent = (boolean) $sent;
+
         return $this;
     }
 
     /**
-     * Get created
-     *
-     * @return \DateTime 
+     * 
+     * @return boolean
      */
-    public function getCreated()
+    public function getSent()
     {
-        return $this->created;
+        return (boolean) ($this->sent);
+    }
+
+    /**
+     * @ORM\PrePersist()
+     * @ORM\PreUpdate()
+     */
+    public function setUpdatedAt()
+    {
+        $this->updatedAt = new \Datetime('now');
+        
+        return $this;
+    }
+    
+    /**
+     * @ORM\PrePersist()
+     */
+    public function setCreatedAt()
+    {
+        $this->createdAt = new \Datetime('now');
+        
+        return $this;
+    }
+    
+    /**
+     *
+     * @return \Datetime
+     */
+    public function getUpdatedAt()
+    {
+        return $this->updatedAt;
     }
 }

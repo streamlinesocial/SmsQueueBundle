@@ -64,11 +64,15 @@ class Sender
                 ->flush ( );
     }
 
+    /**
+     * Load all the buffer, and deliver the message not
+     * yet sent
+     */
     protected function deliverBuffer ( )
     {
         $all = $this->em
                     ->getRepository ( 'StrSocialSmsQueueBundle:BufferMessage' )
-                    ->findAll ( );
+                    ->findBy(array('sent' => false));
 
         $count = 0;
         foreach ( $all as $bmsg )
@@ -77,13 +81,13 @@ class Sender
             try
             {
                 $this->deliver ( $bmsg->getPhoneNumber ( ), $bmsg->getText ( ) );
-                $this->em
-                        ->remove ( $bmsg );
+                $bmsg->setSent(true);
             }
             catch ( Exception $e )
             {
-
+                $bmsg->setSent(false);
             }
+            
             $count++;
             if ( $count > self::CONF_FLUSH_BUFFER_EVERY_N_SENT )
             {
@@ -92,13 +96,21 @@ class Sender
                 $count = 0;
             }
         }
-        $this->em
-                ->flush ( );
+        $this->em->flush ( );
     }
 
+    /**
+     * Call 3rd service that will handle the delivery of the message.
+     * In this case twilio.
+     *  
+     * @param unknown_type $phone
+     * @param unknown_type $text
+     * 
+     * @return boolean
+     */
     protected function deliver ( $phone, $text )
     {
-        $this->twilio
+            $this->twilio
                 ->account
                 ->sms_messages
                 ->create ( $this->from_phone, $phone, $text );
