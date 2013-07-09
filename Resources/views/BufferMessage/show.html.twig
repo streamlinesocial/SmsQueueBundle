@@ -1,0 +1,42 @@
+<h1>BufferMessage</h1>
+
+<table class="record_properties">
+    <tbody>
+        <tr>
+            <th>Id</th>
+            <td>{{ entity.id }}</td>
+        </tr>
+        <tr>
+            <th>Phone_number</th>
+            <td>{{ entity.phonenumber }}</td>
+        </tr>
+        <tr>
+            <th>Text</th>
+            <td>{{ entity.text }}</td>
+        </tr>
+        <tr>
+            <th>Sent</th>
+            <td>{{ entity.sent }}</td>
+        </tr>
+        <tr>
+            <th>Count</th>
+            <td>{{ entity.count }}</td>
+        </tr>
+        <tr>
+            <th>Updatedat</th>
+            <td>{{ entity.updatedAt|date('Y-m-d H:i:s') }}</td>
+        </tr>
+        <tr>
+            <th>Createdat</th>
+            <td>{{ entity.createdAt|date('Y-m-d H:i:s') }}</td>
+        </tr>
+    </tbody>
+</table>
+
+<ul class="record_actions">
+    <li>
+        <a href="{{ path('dev_sms_buffermessage') }}">
+            Back to the list
+        </a>
+    </li>
+</ul>

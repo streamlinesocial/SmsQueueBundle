@@ -158,6 +158,11 @@ class BufferMessage
         return $this->updatedAt;
     }
     
+    public function getCreatedAt()
+    {
+        return $this->createdAt;
+    }
+    
     /**
      * 
      * @return number
