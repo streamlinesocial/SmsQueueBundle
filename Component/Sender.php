@@ -1,6 +1,8 @@
 <?php
 
 namespace StrSocial\Bundle\SmsQueueBundle\Component;
+use Monolog\Logger;
+
 use Vresh\TwilioBundle\Twilio\Twilio;
 
 use StrSocial\Bundle\SmsQueueBundle\Entity\BufferMessage;
@@ -22,7 +24,8 @@ class Sender
             Twilio $twilio,
             $sending_interval,
             $from_phone,
-            $buffer_enable = FALSE )
+            $buffer_enable = FALSE
+            )
     {
         $this->em = $entityManager;
         $this->twilio = $twilio;
@@ -47,6 +50,7 @@ class Sender
         }
         else
         {
+            $this->addToBuffer ( $phone, $text, TRUE);
             $this->deliver ( $phone, $text );
         }
     }
@@ -68,25 +72,32 @@ class Sender
      * Load all the buffer, and deliver the message not
      * yet sent
      */
-    protected function deliverBuffer ( )
+    public function deliverBuffer ( )
     {
-        $all = $this->em
+        $qb = $this->em
                     ->getRepository ( 'StrSocialSmsQueueBundle:BufferMessage' )
-                    ->findBy(array('sent' => false));
+                    ->createQueryBuilder('s');
+        
+        $all = $qb->where('s.sent = false')
+                    ->andWhere($qb->expr()->lte('s.count',25))
+                    ->getQuery()
+                    ->getResult();
 
         $count = 0;
+        $total = 0;
         foreach ( $all as $bmsg )
         {
-
             try
             {
                 $this->deliver ( $bmsg->getPhoneNumber ( ), $bmsg->getText ( ) );
                 $bmsg->setSent(true);
+                $total++;
             }
-            catch ( Exception $e )
+            catch ( \Exception $e )
             {
                 $bmsg->setSent(false);
             }
+            $bmsg->increaseCount();
             
             $count++;
             if ( $count > self::CONF_FLUSH_BUFFER_EVERY_N_SENT )
@@ -97,6 +108,8 @@ class Sender
             }
         }
         $this->em->flush ( );
+        
+        return $total;
     }
 
     /**

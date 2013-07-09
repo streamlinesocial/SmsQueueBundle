@@ -35,6 +35,11 @@ class BufferMessage
     protected $sent = FALSE;
 
     /**
+     * @ORM\Column(type="integer")
+     */
+    protected $count = 0;
+    
+    /**
      * @ORM\Column(type="datetime", name="updated_at")
      */
     protected $updatedAt;
@@ -151,5 +156,24 @@ class BufferMessage
     public function getUpdatedAt()
     {
         return $this->updatedAt;
+    }
+    
+    /**
+     * 
+     * @return number
+     */
+    public function getCount() {
+        return $this->count;
+    }
+    
+    /**
+     * Increment the count of the message
+     * 
+     * @return BufferMessage
+     */
+    public function increaseCount() {
+        $this->count++;
+        
+        return $this;
     }
 }
