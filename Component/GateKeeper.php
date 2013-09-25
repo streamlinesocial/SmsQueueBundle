@@ -17,14 +17,39 @@ class GateKeeper {
     protected $start_time;
     protected $end_time;
     
+    /**
+     * 
+     * @var boolean Flag to indicate if the queue mechanism is ON/OFF
+     */
+    protected $enabled = FALSE;
+    
+    /**
+     * 
+     * @param array $queue_times with two keys
+     *  'start' => time string as understood by strtotime. This time
+     *      indicates at which hour, minute and second the queue START to hold sms 
+     *  'end' => time string as understood by strtotime. This time
+     *      indicates at which hour, minute and second the queue STOPS holding sms
+     *  If any of the keys is missing, or any value are empty for php, or any value
+     *  is 'off', then the queue mechanism is disable.
+     *      
+     */
     public function __construct(Array $queue_times)
     {
-        // @TODO validate arguments
+        // The queue must have start and end times to work properly.
+        // Disable the que if something is not present.
+        if(empty($queue_times['start']) || empty($queue_times['end'])
+        || $queue_times['start'] == 'off' || $queue_times['end'] == 'off'
+    ) {
+            $this->disableQueue();
+        } else {
+            //  23:00:00
+            $this->start_time = $queue_times['start'];
+            // 09:00:00
+            $this->end_time = $queue_times['end'];
         
-        // 23:00:00
-        $this->start_time = $queue_times['start'];
-        // 09:00:00
-        $this->end_time = $queue_times['end'];
+            $this->enableQueue();
+        }
     }
     
     public function getStartQueueTime()
@@ -38,8 +63,32 @@ class GateKeeper {
     }
     
     /**
+     * Turn OFF the flag that indicates if the queue is ENABLE or DISABLE
+     */
+    protected function disableQueue() {
+        $this->enabled = FALSE;
+    }
+    /**
+     * Turn ON the flag that indicates if the queue is ENABLE or DISABLE
+     */
+    protected function enableQueue() {
+        $this->enabled = TRUE;
+    }
+    
+    /**
+     * Whether the Queue is enable or disable
+     * 
+     * @return boolean
+     */
+    public function isEnabled() {
+        return $this->enabled;
+    }
+    
+    /**
      * Find whether or not this $message should be sent now or
-     * set in the queue
+     * set in the queue.
+     * 
+     * If Queue is disable, answer is always TRUE.
      * 
      * @param MessageInterface $message
      * 
@@ -47,6 +96,11 @@ class GateKeeper {
      */
     public function canSend(MessageInterface $message)
     {
+        // if not enable the mechanism default to can be send
+        if(!$this->isEnabled()) {
+            return TRUE;
+        }
+        
         $timezone = $message->getTimeZone();
         $timestampUTC = time();
         
